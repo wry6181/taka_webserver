@@ -51,19 +51,25 @@ b8 app_create(mem_arena* arena, server* server_inst) {
 
     return TRUE;
 }
-b8 app_run() {
+b8 app_run(job_queue* queue) {
     while(_state.is_running) {
+        job job = { .comfy_id = STR8_LIT("alma"), .id = 1, .user_id = 1};
+
+        job_queue_add(queue, &job);
+
         if(!platform_pump_messages(&_state.platform)) {
             _state.is_running = FALSE;
         }
 
         if(!_state.is_suspended) {
-            if (!_state.server_inst->update(_state.server_inst, (f64)0.0)) {
+            if (!_state.server_inst->server_process_job(_state.server_inst, queue)) {
                 T_FATAL("Engine update failed, shutting down.");
                 _state.is_running = FALSE;
                 break;
             }
         }
+
+        job_queue_pop(queue);
 
     }
 

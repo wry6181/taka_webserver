@@ -3,14 +3,6 @@
 #include "core/app.h"
 #include "types.h"
 
-typedef struct server server;
-struct server {
-    app_config config;
-    b8(*init)(server* server_inst);
-    b8(*update)(server* server_inst, f32 delta_time);
-    void* state;
-};
-
 typedef enum job_status job_status;
 enum job_status {
     JOB_QUEUED,
@@ -36,6 +28,14 @@ struct job_queue {
     u64 capacity;
     u64 write_pos;
     u64 read_pos;
+};
+
+typedef struct server server;
+struct server {
+    app_config config;
+    b8(*init)(server* server_inst);
+    b8(*server_process_job)(server* server_inst, job_queue* queue);
+    void* state;
 };
 
 job_queue* job_queue_create(mem_arena* arena, u64 capacity);

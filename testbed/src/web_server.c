@@ -1,4 +1,5 @@
 #include "web_server.h"
+#include "server_types.h"
 
 #include <core/logger.h>
 
@@ -7,6 +8,6 @@ b8 server_init(server* server_inst){
     return TRUE;
 }
 
-b8 server_update(server* server_inst, f32 delta_time){
+b8 server_process_job(server* server_inst, job_queue* queue){
     return TRUE;
 }

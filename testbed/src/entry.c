@@ -9,7 +9,7 @@ b8 create_server(mem_arena* arena, server* server) {
     server->config.port = "8888";
 
     server->init = server_init;
-    server->update = server_update;
+    server->server_process_job = server_process_job;
 
     server->state = PUSH_STRUCT_ZERO(arena, server_state);
 

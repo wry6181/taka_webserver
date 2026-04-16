@@ -10,4 +10,4 @@ struct server_state {
 
 b8 server_init(server* server_inst);
 
-b8 server_update(server* server_inst, f32 delta_time);
+b8 server_process_job(server* server_inst, job_queue* queue);

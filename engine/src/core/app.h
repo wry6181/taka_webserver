@@ -4,6 +4,7 @@
 #include "types.h"
 
 struct server;
+struct job_queue;
 
 typedef struct app_config app_config;
 struct app_config {
@@ -13,4 +14,4 @@ struct app_config {
 };
 
 b8 app_create(mem_arena* arena, struct server* server_inst);
-b8 app_run();
+b8 app_run(struct job_queue* queue);

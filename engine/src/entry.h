@@ -13,13 +13,16 @@ int main(void) {
     server server_inst;
 
     mem_arena* arena = arena_create(MByte(100));
+    mem_arena* job_arena = arena_create(MByte(100));
+
+    job_queue* job_queue = job_queue_create(job_arena, 1000);
 
     if(!create_server(arena, &server_inst)){
         T_ERROR("Could not ceate server");
         return -1;
     }
 
-    if(!server_inst.init || !server_inst.update) {
+    if(!server_inst.init || !server_inst.server_process_job) {
         T_FATAL("The server func pointer must be defined");
         return -2;
     }
@@ -29,7 +32,7 @@ int main(void) {
         return 1;
     }
 
-    if(!app_run()) {
+    if(!app_run(job_queue)) {
         T_INFO("Failed to run app");
         return 2;
     }

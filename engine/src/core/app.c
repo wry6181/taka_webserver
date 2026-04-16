@@ -5,6 +5,7 @@
 #include "logger.h"
 #include "arena.h"
 #include "server_types.h"
+#include "core/event.h"
 
 typedef struct app_state app_state;
 struct app_state {
@@ -37,6 +38,11 @@ b8 app_create(mem_arena* arena, server* server_inst) {
 
     _state.is_running = TRUE;
     _state.is_suspended = FALSE;
+
+    if(!event_init()) {
+        T_ERROR("Event system failed");
+        return FALSE;
+    }
 
     if(!init_platform(arena, &_state.platform, server_inst->config.name)) {
         return FALSE;
@@ -74,6 +80,8 @@ b8 app_run(job_queue* queue) {
     }
 
     _state.is_running = FALSE;
+
+    event_destroy();
 
     destroy_platform(&_state.platform);
 
